@@ -16,7 +16,7 @@ function solve(width, height, columnHints, rowHints) {
 
 const getPossibleRow = (width, rowHint) => {
   if (rowHint.length === 0 ) {
-    return new Array(width).fill(SET_FALSE);
+    return [new Array(width).fill(SET_FALSE)];
   }
 
   const possibleList = [];
@@ -101,6 +101,7 @@ solve(
   testCase1.rowHints
 );
 
-console.log(getPossibleRow(7, [1,2,1]));
+// console.log(getPossibleRow(7, [1,2,1]));1\
+console.log(getPossibleRow(10, [1,2,1]));
 
 exports.default = solve;
