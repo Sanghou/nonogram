@@ -3,7 +3,10 @@ const SET_TRUE = 1;
 const SET_FALSE = 0;
 
 function solve(width, height, columnHints, rowHints) {
-  let answer = new Array(height).fill(new Array(width).fill(SET_UNKNOWN));
+  let answer = new Array(height);
+  for (let i=0; i < width; i++) {
+    answer[i] = new Array(width).fill(SET_UNKNOWN)
+  }
   for (rowHint of rowHints) {
     verifyInput(rowHint, width);
   }
@@ -14,7 +17,8 @@ function solve(width, height, columnHints, rowHints) {
   let count = 100;
   while(count > 0) {
     for (let i=0; i< height;i++) {
-      answer[i] = specify_row(width, rowHints[i], answer[i]);
+      const [value, bool] = specify_row(width, rowHints[i], answer[i]);
+      answer[i] = value;
     }
 
     const columns = transpose(answer);
@@ -22,7 +26,7 @@ function solve(width, height, columnHints, rowHints) {
     // column x row;
 
     for (let i=0; i< width; i++) {
-      const value = specify_row(height, columnHints[i], columns[i]);
+      const [value, bool] = specify_row(height, columnHints[i], columns[i]);
       for (let j = 0; j<height; j++) {
         answer[j][i] = value[j];
       }
@@ -34,8 +38,6 @@ function solve(width, height, columnHints, rowHints) {
     }
     else {
       count--;
-      console.clear();
-      console.log(answer);
     }
   }
 
@@ -47,10 +49,13 @@ function checkSolution(answer, rowHints, columnHints) {
 }
 
 function transpose(array) {
-  const copy = new Array(array.length).fill(new Array(array[0].length).fill(SET_UNKNOWN));
+  let copy = new Array(array[0].length);
+  for (let i=0; i < array[0].length; i++) {
+    copy[i] = new Array(array.length).fill(SET_UNKNOWN)
+  }
   for(let i=0; i < array.length; i++) {
     for (let j=0; j<array[0].length; j++) {
-      copy[j][i] = array[i][j]
+      copy[j][i] = array[i][j];
     }
   }
   return copy;
@@ -132,7 +137,6 @@ const specify_row = (width, rowHint, currentRow) => {
       }
     }
   }
-  console.log(res);
   return [res, true];
 }
 
@@ -172,20 +176,23 @@ const answer1 = [
    0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1,
    0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,
    0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1
-  ]
+  ];
 
-// solve(
-//   testCase1.width,
-//   testCase1.height,
-//   testCase1.columnHints,
-//   testCase1.rowHints
-// );
+
+transpose([[1,2,3],[4,5,6],[7,8,9]]);
+```
+solve(
+  testCase1.width,
+  testCase1.height,
+  testCase1.columnHints,
+  testCase1.rowHints
+);
 
 //console.log(getPossibleRow(7, [1,2,1]));
 console.log('check');
 specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
 specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
-
+```
 //console.log(getPossibleRow(10, [1,2,1]));
 
 exports.default = solve;
