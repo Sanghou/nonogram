@@ -31,7 +31,6 @@ const getPossibleRow = (width, rowHint) => {
   // 5, [2,1] => hintLength = 4, [11001], [11010], [01101] startPosition = possibleFirstElementPosition => 0 or 1
   // 5 - 4 + 2 = 3
 
-  // console.log(width, rowHint);
   for(let startPosition = 0; startPosition < possibleFirstElementPosition; startPosition++) {
     const onePossibleRow = [];
     for (let i=0; i< startPosition; i++) {
@@ -59,6 +58,40 @@ const getPossibleRow = (width, rowHint) => {
   }
 
   return possibleList;
+}
+
+const specify_row = (width, rowHint, currentRow) => {
+  const possible_row = getPossibleRow(width, rowHint);
+  const new_rows = [];
+  for (let row of possible_row) {
+    let flag = true;
+    for(let i=0; i < row.length; i++) {
+      if (currentRow[i] !== SET_UNKNOWN && currentRow[i] !== row[i]) {
+        flag = false;
+        break;
+      }
+    }
+
+    if (flag) {
+      new_rows.push(row);
+    }
+  }
+
+  if (new_rows.length === 0) {
+    //NO answer
+    return [[], false]
+  }
+
+  let res = new_rows[0];
+  for(let row of new_rows) {
+    for (let i=0; i< res.length; i++) {
+      if (res[i] !== SET_UNKNOWN && row[i] !== res[i]) {
+        res[i] = SET_UNKNOWN
+      }
+    }
+  }
+  console.log(res);
+  return [res, true];
 }
 
 /*
@@ -101,7 +134,11 @@ solve(
   testCase1.rowHints
 );
 
-// console.log(getPossibleRow(7, [1,2,1]));1\
-console.log(getPossibleRow(10, [1,2,1]));
+//console.log(getPossibleRow(7, [1,2,1]));
+console.log('check');
+specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
+specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
+
+//console.log(getPossibleRow(10, [1,2,1]));
 
 exports.default = solve;
