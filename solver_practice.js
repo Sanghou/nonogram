@@ -7,14 +7,14 @@ function solve(width, height, columnHints, rowHints) {
   for (let i=0; i < height; i++) {
     answer[i] = new Array(width).fill(SET_UNKNOWN)
   }
-  for (rowHint of rowHints) {
+  for (let rowHint of rowHints) {
     verifyInput(rowHint, width);
   }
-  for (columnHint of columnHints) {
+  for (let columnHint of columnHints) {
     verifyInput(columnHint, height);
   }
 
-  let count = 5;
+  let count = 20;
   while(count > 0) {
     for (let i=0; i< height;i++) {
       const [value, bool] = specify_row(width, rowHints[i], answer[i]);
@@ -22,7 +22,6 @@ function solve(width, height, columnHints, rowHints) {
     }
 
     const columns = transpose(answer);
-    console.log(columns);
     for (let i=0; i< width; i++) {
       const [value, bool] = specify_row(height, columnHints[i], columns[i]);
       for (let j = 0; j<height; j++) {
@@ -32,13 +31,16 @@ function solve(width, height, columnHints, rowHints) {
 
     let checkEnd = checkSolution(answer, rowHints, columnHints);
     if (checkEnd) {
+      console.log('end');
+      console.log(count);
+      console.log(answer);
       return answer;
     }
     else {
       count--;
     }
   }
-  console.log(answer);
+  // console.log(answer);
   return answer;
 }
 
@@ -47,10 +49,31 @@ const NOT_MATCH = "NOT_MATCH";
 const UNDECIDED = "UNDECIDED";
 
 function checkSolution(answer, rowHints, columnHints) {
-  for (let i=0; i < answer.length; i++) {
+  for (let i = 0; i < answer.length; i++) {
     const goodSolution = checkLine(answer[i], rowHints[i]);
-
+    if (goodSolution === UNDECIDED) {
+      return false
+    }
+    else if (goodSolution === NOT_MATCH) {
+      // 값 추측하고 진행하는 부분 추가 시 아래 부분 수정.
+      // 시간 있으면 이 부분 congestion 되돌아 가는 코드 추가하기
+      throw new Error("wrong congestion");
+    }
   }
+
+  let transposedArray = transpose(answer);
+  for (let i=0; i < transposedArray.length; i++) {
+    const goodSolution = checkLine(transposedArray[i], columnHints[i]);
+    if (goodSolution === UNDECIDED) {
+      return false
+    }
+    else if (goodSolution === NOT_MATCH) {
+      // 값 추측하고 진행하는 부분 추가 시 아래 부분 수정.
+      // 시간 있으면 이 부분 congestion 되돌아 가는 코드 추가하기
+      throw new Error("wrong congestion");
+    }
+  }
+  return true
 }
 
 function checkLine(line, hint) {
@@ -225,14 +248,14 @@ solve(
 // console.log('check');
 // specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
 // specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
-console.log(checkLine([1,2,2,2,2,2,2,1,2,2],[1,2,1])); // Un
-console.log(checkLine([1,2,2,2,2,2,1,1,2,1],[1,2,1])); //Un
-console.log(checkLine([1,0,0,0,0,0,1,1,0,1],[1,2,1])); //match
-console.log(checkLine([1,0,0,0,0,1,1,1,0,1],[1,2,1])); //unmatch
-console.log(checkLine([1,0,0,0,1,0,1,1,0,1],[1,2,1])); // not
-console.log(checkLine([1,0,0,1,1,0,1,0,0,1],[1,2,1])); //not
-console.log(checkLine([1,0,0,1,1,0,0,0,0,1],[1,2,1])); // match
-console.log(checkLine([1,0,1,1,0,0,1,1,2,1],[1,2,1])); //Un
+// console.log(checkLine([1,2,2,2,2,2,2,1,2,2],[1,2,1])); // Un
+// console.log(checkLine([1,2,2,2,2,2,1,1,2,1],[1,2,1])); //Un
+// console.log(checkLine([1,0,0,0,0,0,1,1,0,1],[1,2,1])); //match
+// console.log(checkLine([1,0,0,0,0,1,1,1,0,1],[1,2,1])); //unmatch
+// console.log(checkLine([1,0,0,0,1,0,1,1,0,1],[1,2,1])); // not
+// console.log(checkLine([1,0,0,1,1,0,1,0,0,1],[1,2,1])); //not
+// console.log(checkLine([1,0,0,1,1,0,0,0,0,1],[1,2,1])); // match
+// console.log(checkLine([1,0,1,1,0,0,1,1,2,1],[1,2,1])); //Un
 // transpose([[1,2,3],[4,5,6],[7,8,9]]);
 //console.log(getPossibleRow(10, [1,2,1]));
 
