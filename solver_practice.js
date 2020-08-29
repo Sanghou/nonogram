@@ -42,8 +42,45 @@ function solve(width, height, columnHints, rowHints) {
   return answer;
 }
 
-function checkSolution(answer, rowHints, columnHints) {
+const MATCH = "MATCH";
+const NOT_MATCH = "NOT_MATCH";
+const UNDECIDED = "UNDECIDED";
 
+function checkSolution(answer, rowHints, columnHints) {
+  for (let i=0; i < answer.length; i++) {
+    const goodSolution = checkLine(answer[i], rowHints[i]);
+
+  }
+}
+
+function checkLine(line, hint) {
+
+  let consecutive = 0;
+  const check = [];
+   for (let elem of line) {
+    if (elem === SET_UNKNOWN) {
+       return UNDECIDED;
+    }
+    if (elem === SET_TRUE) {
+      consecutive += 1;
+    }
+    if (elem === SET_FALSE) {
+      if(consecutive !== 0) {
+        check.push(consecutive);
+      }
+      consecutive = 0
+    }
+ }
+
+ if (consecutive) {
+     check.push(consecutive);
+ }
+
+  if(JSON.stringify(check) === JSON.stringify(hint)) {
+     return MATCH;
+  } else {
+     return NOT_MATCH;
+  }
 }
 
 function transpose(array) {
@@ -188,6 +225,14 @@ solve(
 // console.log('check');
 // specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
 // specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
+console.log(checkLine([1,2,2,2,2,2,2,1,2,2],[1,2,1])); // Un
+console.log(checkLine([1,2,2,2,2,2,1,1,2,1],[1,2,1])); //Un
+console.log(checkLine([1,0,0,0,0,0,1,1,0,1],[1,2,1])); //match
+console.log(checkLine([1,0,0,0,0,1,1,1,0,1],[1,2,1])); //unmatch
+console.log(checkLine([1,0,0,0,1,0,1,1,0,1],[1,2,1])); // not
+console.log(checkLine([1,0,0,1,1,0,1,0,0,1],[1,2,1])); //not
+console.log(checkLine([1,0,0,1,1,0,0,0,0,1],[1,2,1])); // match
+console.log(checkLine([1,0,1,1,0,0,1,1,2,1],[1,2,1])); //Un
 // transpose([[1,2,3],[4,5,6],[7,8,9]]);
 //console.log(getPossibleRow(10, [1,2,1]));
 
