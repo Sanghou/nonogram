@@ -3,7 +3,7 @@ const SET_TRUE = 1;
 const SET_FALSE = 0;
 
 function solve(width, height, columnHints, rowHints) {
-  const answer = new Array(height).fill(new Array(width).fill(SET_UNKNOWN));
+  let answer = new Array(height).fill(new Array(width).fill(SET_UNKNOWN));
   for (rowHint of rowHints) {
     verifyInput(rowHint, width);
   }
@@ -11,7 +11,49 @@ function solve(width, height, columnHints, rowHints) {
     verifyInput(columnHint, height);
   }
 
+  let count = 100;
+  while(count > 0) {
+    for (let i=0; i< height;i++) {
+      answer[i] = specify_row(width, rowHints[i], answer[i]);
+    }
+
+    const columns = transpose(answer);
+
+    // column x row;
+
+    for (let i=0; i< width; i++) {
+      const value = specify_row(height, columnHints[i], columns[i]);
+      for (let j = 0; j<height; j++) {
+        answer[j][i] = value[j];
+      }
+    }
+
+    let checkEnd = checkSolution(answer, rowHints, columnHints);
+    if (checkEnd) {
+      return answer;
+    }
+    else {
+      count--;
+      console.clear();
+      console.log(answer);
+    }
+  }
+
   return answer;
+}
+
+function checkSolution(answer, rowHints, columnHints) {
+
+}
+
+function transpose(array) {
+  const copy = new Array(array.length).fill(new Array(array[0].length).fill(SET_UNKNOWN));
+  for(let i=0; i < array.length; i++) {
+    for (let j=0; j<array[0].length; j++) {
+      copy[j][i] = array[i][j]
+    }
+  }
+  return copy;
 }
 
 const getPossibleRow = (width, rowHint) => {
@@ -100,12 +142,17 @@ ex) hints = [1,1,1], width = 5 => no error.
 ex) hints = [1,1,1], width = 4 => error occur. 
 */
 const verifyInput = (hints, length) => {
-  const sum = hints.reduce((acc, cur) => {
-    return acc + cur;
-  }, 0);
+  try {
+    const sum = hints.reduce((acc, cur) => {
+      return acc + cur;
+    }, 0);
 
-  if (length < sum + hints.length - 1) {
-    throw new Error("wrong input. Please check input size");
+    if (length < sum + hints.length - 1) {
+      throw new Error("wrong input. Please check input size");
+    }
+  } catch(err) {
+    console.log(err);
+    throw new Error("wrong input. Please check input");
   }
 };
 
@@ -127,12 +174,12 @@ const answer1 = [
    0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1
   ]
 
-solve(
-  testCase1.width,
-  testCase1.height,
-  testCase1.columnHints,
-  testCase1.rowHints
-);
+// solve(
+//   testCase1.width,
+//   testCase1.height,
+//   testCase1.columnHints,
+//   testCase1.rowHints
+// );
 
 //console.log(getPossibleRow(7, [1,2,1]));
 console.log('check');
