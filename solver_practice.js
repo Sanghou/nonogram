@@ -4,7 +4,7 @@ const SET_FALSE = 0;
 
 function solve(width, height, columnHints, rowHints) {
   let answer = new Array(height);
-  for (let i=0; i < width; i++) {
+  for (let i=0; i < height; i++) {
     answer[i] = new Array(width).fill(SET_UNKNOWN)
   }
   for (rowHint of rowHints) {
@@ -14,7 +14,7 @@ function solve(width, height, columnHints, rowHints) {
     verifyInput(columnHint, height);
   }
 
-  let count = 100;
+  let count = 5;
   while(count > 0) {
     for (let i=0; i< height;i++) {
       const [value, bool] = specify_row(width, rowHints[i], answer[i]);
@@ -22,9 +22,7 @@ function solve(width, height, columnHints, rowHints) {
     }
 
     const columns = transpose(answer);
-
-    // column x row;
-
+    console.log(columns);
     for (let i=0; i< width; i++) {
       const [value, bool] = specify_row(height, columnHints[i], columns[i]);
       for (let j = 0; j<height; j++) {
@@ -40,7 +38,7 @@ function solve(width, height, columnHints, rowHints) {
       count--;
     }
   }
-
+  console.log(answer);
   return answer;
 }
 
@@ -179,8 +177,6 @@ const answer1 = [
   ];
 
 
-transpose([[1,2,3],[4,5,6],[7,8,9]]);
-```
 solve(
   testCase1.width,
   testCase1.height,
@@ -188,11 +184,11 @@ solve(
   testCase1.rowHints
 );
 
-//console.log(getPossibleRow(7, [1,2,1]));
-console.log('check');
-specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
-specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
-```
+// //console.log(getPossibleRow(7, [1,2,1]));
+// console.log('check');
+// specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
+// specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
+// transpose([[1,2,3],[4,5,6],[7,8,9]]);
 //console.log(getPossibleRow(10, [1,2,1]));
 
 exports.default = solve;
