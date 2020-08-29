@@ -33,15 +33,19 @@ function solve(width, height, columnHints, rowHints) {
     if (checkEnd) {
       console.log('end');
       console.log(count);
-      console.log(answer);
-      return answer;
+      // console.log(answer);
+      break;
     }
     else {
       count--;
     }
   }
-  // console.log(answer);
-  return answer;
+
+  for (let arr of answer) {
+    console.log(...arr);
+  }
+
+  return answer.flat();
 }
 
 const MATCH = "MATCH";
@@ -236,6 +240,21 @@ const answer1 = [
    0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1
   ];
 
+const testCase2 = {
+  width: 8,
+  height: 6,
+  columnHints: [[4], [2], [2, 2], [6], [3, 2], [1, 2], [2], [1, 2]],
+  rowHints: [[3, 1], [1, 4], [1, 2, 1], [1, 1, 2], [7], [5]],
+};
+// prettier-ignore
+const answer2 = [
+  0, 0, 1, 1, 1, 0, 0, 1,
+  1, 0, 1, 1, 1, 1, 0, 0,
+  1, 0, 0, 1, 1, 0, 0, 1,
+  1, 0, 0, 1, 0, 0, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 0,
+  0, 1, 1, 1, 1, 1, 0, 0
+]
 
 solve(
   testCase1.width,
@@ -243,6 +262,13 @@ solve(
   testCase1.columnHints,
   testCase1.rowHints
 );
+
+solve(
+  testCase2.width,
+  testCase2.height,
+  testCase2.columnHints,
+  testCase2.rowHints
+)
 
 // //console.log(getPossibleRow(7, [1,2,1]));
 // console.log('check');
