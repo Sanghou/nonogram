@@ -14,7 +14,7 @@ function solve(width, height, columnHints, rowHints) {
     verifyInput(columnHint, height);
   }
 
-  let count = 20;
+  let count = 50;
   while(count > 0) {
     for (let i=0; i< height;i++) {
       const [value, bool] = specify_row(width, rowHints[i], answer[i]);
@@ -256,6 +256,18 @@ const answer2 = [
   0, 1, 1, 1, 1, 1, 0, 0
 ]
 
+const testCase3 = {
+  width: 30,
+  height: 30,
+  rowHints: [[6,3], [1,1,1,1,4], [1,1,1,1,6], [7,10], [3,7,5], [3,4,3], [3,3,3], [8,4,2],[8,2,2,5], [8,5,4]
+  ,[8,2,4],[8,1,3,3], [8,2,2,1,1,2], [10,1,3,3,2], [10,2,3,2],[4,2,1,3,6], [2,1,9,1], [1,14], [1,6,1],[2,10],
+    [2,7,1],[1,3,9],[1,5,1,2,6,1], [14,1,10],[12,12],[10,2,1,12],[10,2,8,1,1],[12,7,5],[14,9],[]],
+  columnHints: [[],[7],[6,5],[4,7],[11,7],[15,7],[1,12,7],[5,9,7],[1,1,9,6],[5,8,6]
+  ,[1,12,6],[15,2,3],[3,3,3,2],[3,2,1,3,4],[2,2,4,1,1,2,1,1],[2,3,2,1,2,2,1],[2,1,1,2,3,3,2],[2,3,3,2,4],[3,3,2,2,6],[4,1,5,7]
+    ,[5,13], [5,3,14],[2,2,1,14],[2,4,12,1], [3,14], [4,3,1,3,3,2],[12,1,1,1,4],[5,3,3,1,1],[4,3,3],[3]
+  ],
+}
+
 solve(
   testCase1.width,
   testCase1.height,
@@ -268,6 +280,13 @@ solve(
   testCase2.height,
   testCase2.columnHints,
   testCase2.rowHints
+)
+
+solve(
+  testCase3.width,
+  testCase3.height,
+  testCase3.columnHints,
+  testCase3.rowHints
 )
 
 // //console.log(getPossibleRow(7, [1,2,1]));
