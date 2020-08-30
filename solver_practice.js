@@ -125,10 +125,6 @@ const getPossibleRowWithConstraint = (width, rowHint, currentRow) => {
     return acc + cur + 1;
   }, -1)
 
-  // ex) length 7, [2,1,1] => hintLength = 6, possibleFirstPosition => 0 or 1.
-  // 7 - 6 + 1 = 2
-  // 5, [2,1] => hintLength = 4, [11001], [11010], [01101] startPosition = possibleFirstElementPosition => 0 or 1
-  // 5 - 4 + 2 = 3
   const possibleFirstElementPosition = width - hintLength + 1;
 
   for(let startPosition = 0; startPosition < possibleFirstElementPosition; startPosition++) {
@@ -139,7 +135,6 @@ const getPossibleRowWithConstraint = (width, rowHint, currentRow) => {
     for (let i=0; i< rowHint[0]; i++) {
       onePossibleRow.push(SET_TRUE);
     }
-    // 계속해서 subArray 완성시키기
     let nowPosition = onePossibleRow.length;
     if (nowPosition < width) {
       onePossibleRow.push(SET_FALSE);
@@ -233,82 +228,5 @@ const verifyInput = (hints, length) => {
     throw new Error("wrong input. Please check input");
   }
 };
-
-// prettier-ignore
-const testCase1 = {
-  width: 13,
-  height: 5,
-  columnHints: [[1], [1], [5], [], [1, 1], [], [1, 1, 1], [1, 1, 1], [5], [],
-    [3, 1], [1, 1, 1], [1,3]],
-  rowHints: [[3, 3, 3], [1, 1, 1, 1], [1, 3, 3], [1, 1, 1, 1], [1, 3, 3]],
-};
-// prettier-ignore
-const answer1 = [
-  1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1,
-  0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0,
-  0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1,
-  0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,
-  0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1
-]
-
-const testCase2 = {
-  width: 8,
-  height: 6,
-  columnHints: [[4], [2], [2, 2], [6], [3, 2], [1, 2], [2], [1, 2]],
-  rowHints: [[3, 1], [1, 4], [1, 2, 1], [1, 1, 2], [7], [5]],
-};
-// prettier-ignore
-const answer2 = [
-  0, 0, 1, 1, 1, 0, 0, 1,
-  1, 0, 1, 1, 1, 1, 0, 0,
-  1, 0, 0, 1, 1, 0, 0, 1,
-  1, 0, 0, 1, 0, 0, 1, 1,
-  1, 1, 1, 1, 1, 1, 1, 0,
-  0, 1, 1, 1, 1, 1, 0, 0
-]
-
-const testCase5 = {
-  width: 30,
-  height: 40,
-  columnHints: [
-    [2],[8],[12],[16],[19],
-    [22],[26],[28],[32],[3,23,8],
-    [18,7,7],[17,3,6],[16,5],[7,6,1,2],[6,1,6,1,1],
-    [5,2,6,2],[6,1,6,1,1],[7,6,1,4],[16,6],[18,3,7],
-    [26,8],[3,23,8],[31],[27],[24],
-    [21],[18],[14],[10],[3]
-  ],
-  rowHints: [
-    [3,5,3], [13], [13], [11] ,[11],
-    [5,5], [5,4], [4,4], [5,5], [5,3,5],
-    [5,1,5], [7,5], [17], [18], [19],
-    [19], [20], [6,4,7], [5,6], [6,7],
-    [8,8], [9,2,2,8], [9,9], [8,3,8], [9,1,8],
-    [9,9], [10,8], [9,8], [9,8], [9,9],
-    [9,8],[8,8],[9,9], [12,11], [11,12],
-    [12,11], [11,10], [9,9], [6,6], [3,3]
-  ],
-};
-
-let answer = solve(
-  testCase1.width,
-  testCase1.height,
-  testCase1.columnHints,
-  testCase1.rowHints
-);
-
-answer = solve(
-  testCase2.width,
-  testCase2.height,
-  testCase2.columnHints,
-  testCase2.rowHints
-)
-
-answer = solve(
-  testCase5.width,
-  testCase5.height,
-  testCase5.columnHints,
-  testCase5.rowHints
-)
 
 exports.default = solve;
