@@ -37,6 +37,9 @@ function solve(width, height, columnHints, rowHints) {
       break;
     }
     else {
+      for (let arr of answer) {
+        console.log(...arr);
+      }
       count--;
     }
   }
@@ -123,7 +126,7 @@ function transpose(array) {
   return copy;
 }
 
-const getPossibleRow = (width, rowHint) => {
+const getPossibleRow = (width, rowHint,currentRow = []) => {
   if (rowHint.length === 0 ) {
     return [new Array(width).fill(SET_FALSE)];
   }
@@ -169,8 +172,76 @@ const getPossibleRow = (width, rowHint) => {
   return possibleList;
 }
 
+const new_permutation_with_constraint = (width, rowHint, currentRow) => {
+  if (rowHint.length === 0 ) {
+    return [new Array(width).fill(SET_FALSE)];
+  }
+
+  const possibleList = [];
+
+  const hintLength = rowHint.reduce((acc,cur) => {
+    return acc + cur + 1;
+  }, -1)
+
+  // ex) length 7, [2,1,1] => hintLength = 6, possibleFirstPosition => 0 or 1.
+  // 7 - 6 + 1 = 2
+  // 5, [2,1] => hintLength = 4, [11001], [11010], [01101] startPosition = possibleFirstElementPosition => 0 or 1
+  // 5 - 4 + 2 = 3
+  const possibleFirstElementPosition = width - hintLength + 1;
+
+  for(let startPosition = 0; startPosition < possibleFirstElementPosition; startPosition++) {
+    const onePossibleRow = [];
+    for (let i=0; i< startPosition; i++) {
+      onePossibleRow.push(SET_FALSE);
+    }
+    for (let i=0; i< rowHint[0]; i++) {
+      onePossibleRow.push(SET_TRUE);
+    }
+    // 계속해서 subArray 완성시키기
+    let nowPosition = onePossibleRow.length;
+    if (nowPosition < width) {
+      onePossibleRow.push(SET_FALSE);
+      nowPosition++;
+    }
+
+    if (nowPosition === width) {
+      possibleList.push(onePossibleRow);
+      continue;
+    }
+
+    let wrongMatchFlag = false;
+    for (let i=0; i<nowPosition; i++) {
+      if (currentRow[i] !== SET_UNKNOWN && currentRow[i] !== onePossibleRow[i]) {
+        wrongMatchFlag = true;
+        break;
+      }
+    }
+    if (wrongMatchFlag) {
+      continue;
+    }
+
+    let sub_array = new_permutation_with_constraint(width - nowPosition, rowHint.slice(1), currentRow.slice(nowPosition));
+
+    sub_array.map((subarr) => {
+      possibleList.push([...onePossibleRow,...subarr]);
+    })
+  }
+
+  return possibleList;
+}
+
 const specify_row = (width, rowHint, currentRow) => {
-  const possible_row = getPossibleRow(width, rowHint);
+  if (!currentRow.includes(SET_TRUE) && !currentRow.includes(SET_FALSE)) {
+    const hintLength = rowHint.reduce((acc,cur) => {
+      return acc + cur + 1;
+    }, -1)
+    if (hintLength <= width/2) {
+      return [currentRow, true];
+    }
+  }
+
+
+  let possible_row = new_permutation_with_constraint(width, rowHint, currentRow);
   const new_rows = [];
   for (let row of possible_row) {
     let flag = true;
@@ -185,6 +256,7 @@ const specify_row = (width, rowHint, currentRow) => {
       new_rows.push(row);
     }
   }
+  possible_row = null;
 
   if (new_rows.length === 0) {
     //NO answer
@@ -259,35 +331,57 @@ const answer2 = [
 const testCase3 = {
   width: 30,
   height: 30,
-  rowHints: [[6,3], [1,1,1,1,4], [1,1,1,1,6], [7,10], [3,7,5], [3,4,3], [3,3,3], [8,4,2],[8,2,2,5], [8,5,4]
-  ,[8,2,4],[8,1,3,3], [8,2,2,1,1,2], [10,1,3,3,2], [10,2,3,2],[4,2,1,3,6], [2,1,9,1], [1,14], [1,6,1],[2,10],
-    [2,7,1],[1,3,9],[1,5,1,2,6,1], [14,1,10],[12,12],[10,2,1,12],[10,2,8,1,1],[12,7,5],[14,9],[]],
   columnHints: [[],[7],[6,5],[4,7],[11,7],[15,7],[1,12,7],[5,9,7],[1,1,9,6],[5,8,6]
   ,[1,12,6],[15,2,3],[3,3,3,2],[3,2,1,3,4],[2,2,4,1,1,2,1,1],[2,3,2,1,2,2,1],[2,1,1,2,3,3,2],[2,3,3,2,4],[3,3,2,2,6],[4,1,5,7]
     ,[5,13], [5,3,14],[2,2,1,14],[2,4,12,1], [3,14], [4,3,1,3,3,2],[12,1,1,1,4],[5,3,3,1,1],[4,3,3],[3]
   ],
+  rowHints: [[6,3], [1,1,1,1,4], [1,1,1,1,6], [7,10], [3,7,5], [3,4,3], [3,3,3], [8,4,2],[8,2,2,5], [8,5,4]
+    ,[8,2,4],[8,1,3,3], [8,2,2,1,1,2], [10,1,3,3,2], [10,2,3,2],[4,2,1,3,6], [2,1,9,1], [1,14], [1,6,1],[2,10],
+    [2,7,1],[1,3,9],[1,5,1,2,6,1], [14,1,10],[12,12],[10,2,1,12],[10,2,8,1,1],[12,7,5],[14,9],[]],
 }
 
-solve(
-  testCase1.width,
-  testCase1.height,
-  testCase1.columnHints,
-  testCase1.rowHints
-);
+const testCase4 = {
+  width: 50,
+  height: 80,
+  columnHints: [
+    [11,10,57],[10,23,2,27],[9,14,3,22],[8,13,4,1,8,20],[7,7,6,6,1,3,18],[7,5,1,4,8,3,2,16],[10,1,1,4,3,4,4,2,14],[9,1,4,3,1,3,4,2,12], [8,4,3,5,3,13], [8,2,9,2,2,4,11], [8,1,6,1,1,5,11,9],[7,4,10,14,8], [7,1,2,1,7,4,3,6,7], [7,2,3,6,3,4,5,5], [1,1,12,2,4,4,5], [1,1,9,2,2,2,4], [4,2,2,2,1,2,2,3], [1,3,1,5,2,3], [4,3,1,1,3,1,1,1,2,2,3], [4,5,1,3,5,3,1],[3,1,7,1,2,4,2,1],[5,4,1,3,3,2],[3,1,1,1,3,1,3,5,2],[2,2,3,1,3,6,2],[3,2,3,4,12,3],[2,3,6,6,3,3],[3,2,1,2,4,7,4], [3,2,4,5,5,5],[3,3,4,4,1,3,5],[3,3,9,1,1,6], [1,2,10,7], [1,2,2,6,8], [3,2,10,8], [2,2,8,9], [3,1,2,7,10], [5,9,11],[5,1,4,12],[4,1,2,13],[6,14], [6,4,1,15], [5,3,16], [6,1,2,1,1,1,16],[1,7,2,12,18],[1,8,14,19],[1,8,3,2,20],[2,6,2,1,3,3,4,21],[2,9,1,1,1,4,9,23],[3,9,42],[5,8,42],[3,1,6,1,11,27]
+  ],
+  rowHints: [
+    [16,14,4,8],[14,12,9,5],[14,7,1,4,1,6,3], [14,4,1,9,1],[14,2,3,13,2],[17,1,10], [14,11],[4,5,8], [3,3,8], [2,3,7], [1,3,1,2,4],[6,6],[6,5],[5,1,3],[6,2,2],[5,2],[4],[5,1,1],[10,5],[11,10],[9,1,7],[9],[4],[3],[3],[2,3,2,6,1],[2,5,3,8,2],[2,6,2,4,3,2],[2,3,4,3,13,2,1],[2,2,9,5,7],[2,2,5,3,1,9],[2,3,8,12],[2,6,2,1,12],[10,3,14],[4,3,4,2,1,1,3,1],[1,2,2,3,2,3,2,2],[2,2,1,3,2,2,1,2],[2,3,3,1,2],[1,3,2,3],[1,2,4,1,3],[1,1,4,1,4],[1,2,4,7],[1,2,1,2,2,5],[1,4,1,2,5],[1,5,3,1,2,4],[1,9,3,1,1,7],[1,1,6,2,5],[1,2,5],[1,1,2,4], [1,1,2,2],[1,1,2,2],[1,1,2,2,2], [2,1,3,2,3],[2,1,6,2,1,2,1,2,3],[2,1,20,1,2,3],[2,2,22,1,3], [2,1,6,3,7,1,4],[3,1,2,1,5,1,4],[3,1,2,1,1,1,4,1,5],[4,1,2,1,4,6],[4,1,2,1,2,1,7],[5,1,2,1,1,4,8],[5,2,1,4,8],[6,1,2,1,4,10],[6,1,2,2,3,11],[7,2,1,1,1,12],[7,1,2,1,2,2,13],[9,3,1,1,14],[10,2,2,15],[10,3,2,16],[11,2,1,17],[12,7,19],[13,5,20],[14,21],[15,23],[16,24],[19,26],[50],[13,5,29]
+  ],
+}
+//
+// solve(
+//   testCase1.width,
+//   testCase1.height,
+//   testCase1.columnHints,
+//   testCase1.rowHints
+// );
+//
+// solve(
+//   testCase2.width,
+//   testCase2.height,
+//   testCase2.columnHints,
+//   testCase2.rowHints
+// )
+
+// console.time('3');
+// solve(
+//   testCase3.width,
+//   testCase3.height,
+//   testCase3.columnHints,
+//   testCase3.rowHints
+// )
+// console.timeEnd('3');
 
 solve(
-  testCase2.width,
-  testCase2.height,
-  testCase2.columnHints,
-  testCase2.rowHints
+  testCase4.width,
+  testCase4.height,
+  testCase4.columnHints,
+  testCase4.rowHints
 )
 
-solve(
-  testCase3.width,
-  testCase3.height,
-  testCase3.columnHints,
-  testCase3.rowHints
-)
+// console.log(new_permutation_with_constraint(5, [1,1], [SET_UNKNOWN, SET_TRUE, SET_UNKNOWN, SET_UNKNOWN, SET_UNKNOWN]));
 
 // //console.log(getPossibleRow(7, [1,2,1]));
 // console.log('check');
