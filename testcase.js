@@ -64,3 +64,59 @@ export const testCase5 = {
     [12,11], [11,10], [9,9], [6,6], [3,3]
   ],
 };
+
+//
+// solve(
+//   testCase1.width,
+//   testCase1.height,
+//   testCase1.columnHints,
+//   testCase1.rowHints
+// );
+//
+// solve(
+//   testCase2.width,
+//   testCase2.height,
+//   testCase2.columnHints,
+//   testCase2.rowHints
+// )
+
+// console.time('3');
+// solve(
+//   testCase3.width,
+//   testCase3.height,
+//   testCase3.columnHints,
+//   testCase3.rowHints
+// )
+// console.timeEnd('3');
+
+// solve(
+//   testCase4.width,
+//   testCase4.height,
+//   testCase4.columnHints,
+//   testCase4.rowHints
+// )
+// console.time('1');
+// solve(
+//   testCase5.width,
+//   testCase5.height,
+//   testCase5.columnHints,
+//   testCase5.rowHints
+// )
+// console.timeEnd('1');
+
+// console.log(new_permutation_with_constraint(5, [1,1], [SET_UNKNOWN, SET_TRUE, SET_UNKNOWN, SET_UNKNOWN, SET_UNKNOWN]));
+
+// //console.log(getPossibleRow(7, [1,2,1]));
+// console.log('check');
+// specify_row(7, [1,2,1], [1,2,2,2,2,2,2]);
+// specify_row(10, [1,2,1], [1,2,2,2,2,2,2,1,2,2]);
+// console.log(checkLine([1,2,2,2,2,2,2,1,2,2],[1,2,1])); // Un
+// console.log(checkLine([1,2,2,2,2,2,1,1,2,1],[1,2,1])); //Un
+// console.log(checkLine([1,0,0,0,0,0,1,1,0,1],[1,2,1])); //match
+// console.log(checkLine([1,0,0,0,0,1,1,1,0,1],[1,2,1])); //unmatch
+// console.log(checkLine([1,0,0,0,1,0,1,1,0,1],[1,2,1])); // not
+// console.log(checkLine([1,0,0,1,1,0,1,0,0,1],[1,2,1])); //not
+// console.log(checkLine([1,0,0,1,1,0,0,0,0,1],[1,2,1])); // match
+// console.log(checkLine([1,0,1,1,0,0,1,1,2,1],[1,2,1])); //Un
+// transpose([[1,2,3],[4,5,6],[7,8,9]]);
+//console.log(getPossibleRow(10, [1,2,1]));
