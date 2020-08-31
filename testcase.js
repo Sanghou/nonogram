@@ -120,3 +120,112 @@ export const testCase5 = {
 // console.log(checkLine([1,0,1,1,0,0,1,1,2,1],[1,2,1])); //Un
 // transpose([[1,2,3],[4,5,6],[7,8,9]]);
 //console.log(getPossibleRow(10, [1,2,1]));
+
+const testcase1 = {
+  width: 8,
+  height: 6,
+  columnHints: [
+    [ 2 ],    [ 1, 1 ],
+    [ 1, 1 ], [ 1 ],
+    [ 3 ],    [ 1 ],
+    [ 1 ],    [ 1, 1 ]
+  ],
+  rowHints: [ [ 1, 3 ], [ 1, 1, 1, 2 ], [ 1, 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+};
+
+console.time('1');
+solve(testcase1.width, testcase1.height, testcase1.columnHints, testcase1.rowHints);
+console.timeEnd('1');
+
+const testCase5 = {
+  width: 30,
+  height: 40,
+  columnHints: [
+    [2],[8],[12],[16],[19],
+    [22],[26],[28],[32],[3,23,8],
+    [18,7,7],[17,3,6],[16,5],[7,6,1,2],[6,1,6,1,1],
+    [5,2,6,2],[6,1,6,1,1],[7,6,1,4],[16,6],[18,3,7],
+    [26,8],[3,23,8],[31],[27],[24],
+    [21],[18],[14],[10],[3]
+  ],
+  rowHints: [
+    [3,5,3], [13], [13], [11] ,[11],
+    [5,5], [5,4], [4,4], [5,5], [5,3,5],
+    [5,1,5], [7,5], [17], [18], [19],
+    [19], [20], [6,4,7], [5,6], [6,7],
+    [8,8], [9,2,2,8], [9,9], [8,3,8], [9,1,8],
+    [9,9], [10,8], [9,8], [9,8], [9,9],
+    [9,8],[8,8],[9,9], [12,11], [11,12],
+    [12,11], [11,10], [9,9], [6,6], [3,3]
+  ],
+};
+console.time('5');
+solve(testCase5.width,
+  testCase5.height, testCase5.columnHints, testCase5.rowHints);
+console.timeEnd('5');
+
+
+const testCase1 = {
+  width: 13,
+  height: 5,
+  columnHints: [[1], [1], [5], [], [1, 1], [], [1, 1, 1], [1, 1, 1], [5], [],
+    [3, 1], [1, 1, 1], [1,3]],
+  rowHints: [[3, 3, 3], [1, 1, 1, 1], [1, 3, 3], [1, 1, 1, 1], [1, 3, 3]],
+};
+
+console.time('1');
+solve(testCase1.width,
+  testCase1.height,
+  testCase1.columnHints,
+  testCase1.rowHints);
+console.timeEnd('1');
+
+
+const anti2 = {
+  width: 8,
+  height: 8,
+  columnHints: [[], [1], [], [2, 1
+  ],
+    [1], [1, 1, 1], [3], [1, 1]
+  ],
+  rowHints: [
+    [1], [],
+    [1], [],
+    [1, 3], [1, 1],
+    [3], [1, 1]
+  ]
+};
+
+console.time('2');
+solve(anti2.width,
+  anti2.height,
+  anti2.columnHints,
+  anti2.rowHints);
+console.timeEnd('2');
+
+const anti3 = {
+  width: 12,
+  height: 12,
+  columnHints: [[ 2, 1, 2, 1 ], [ 1, 2, 1, 1 ],
+    [ 1, 1 ],       [ 1, 1, 1 ],
+    [ 1, 1, 2, 1 ], [ 1, 1, 1, 1 ],
+    [ 2, 2, 1, 1 ], [ 1, 1 ],
+    [ 1, 1, 1 ],    [ 1, 1, 2 ],
+    [ 1, 1 ],       []
+  ],
+  rowHints:[
+    [ 4, 1 ],    [ 3, 1 ],
+    [ 1, 1, 1 ], [ 3, 1, 1 ],
+    [ 1, 1 ],    [ 1, 1 ],
+    [ 1, 1 ],    [ 1, 2, 1 ],
+    [ 1, 1, 1 ], [ 2, 2 ],
+    [ 2, 1 ],    [ 3, 1, 1 ]
+  ]
+}
+
+console.time('3');
+solve(anti3.width,
+  anti3.height,
+  anti3.columnHints,
+  anti3.rowHints);
+console.timeEnd('3');
