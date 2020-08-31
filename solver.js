@@ -26,17 +26,18 @@ const UNDECIDED = "UNDECIDED";
 
 
 function solve_with_congestion(width, height, columnHints, rowHints,currentAnswer, congestionWidth = -1, congestionColumn = -1 , value=null) {
-  // console.log('congestion!');
   let answer = currentAnswer;
-  // if (congestionColumn >= 0 && congestionWidth >=0) {
-  //   answer[congestionColumn][congestionWidth] = value;
-  // }
+  if (congestionColumn >= 0 && congestionWidth >=0) {
+    console.log('congestion!');
+    answer[congestionColumn][congestionWidth] = value;
+  }
 
   let checkEnd = false;
 
   let count = 10;
-  let prev = '';
-  while(checkEnd!==MATCH || count > 0) {
+
+  while(checkEnd!==MATCH && count > 0) {
+    let prev = JSON.stringify(answer);
     for (let i=0; i< height;i++) {
       const [value, bool] = specifyRow(width, rowHints[i], answer[i]);
       answer[i] = value;
@@ -56,12 +57,13 @@ function solve_with_congestion(width, height, columnHints, rowHints,currentAnswe
       return null
     }
     count--;
-    // if (prev === JSON.stringify(answer)) {
-    //   answer = solve_with_congestion(width, height, columnHints, rowHints,answer,-1,-1 , true) ||
-    //     solve_with_congestion(width, height, columnHints, rowHints,answer, -1,-1 , false)
-    //
-    // }
-    prev = JSON.stringify(answer);
+
+    if (prev === JSON.stringify(answer)) {
+      console.log('need congestion');
+      // answer = solve_with_congestion(width, height, columnHints, rowHints,answer,-1,-1 , true) ||
+      //   solve_with_congestion(width, height, columnHints, rowHints,answer, -1,-1 , false)
+      break;
+    }
   }
 
   for (let arr of answer) {
@@ -270,9 +272,9 @@ const testcase1 = {
   rowHints: [ [ 1, 3 ], [ 1, 1, 1, 2 ], [ 1, 1 ], [ 1 ], [ 1 ], [ 1 ] ]
 };
 
-// console.time('1');
-// solve(testcase1.width, testcase1.height, testcase1.columnHints, testcase1.rowHints);
-// console.timeEnd('1');
+console.time('1');
+solve(testcase1.width, testcase1.height, testcase1.columnHints, testcase1.rowHints);
+console.timeEnd('1');
 
 const testCase5 = {
   width: 30,
@@ -297,8 +299,23 @@ const testCase5 = {
   ],
 };
 
-console.time('5');
-solve(testCase5.width,
-  testCase5.height, testCase5.columnHints, testCase5.rowHints);
-console.timeEnd('5');
+const testCase1 = {
+  width: 13,
+  height: 5,
+  columnHints: [[1], [1], [5], [], [1, 1], [], [1, 1, 1], [1, 1, 1], [5], [],
+    [3, 1], [1, 1, 1], [1,3]],
+  rowHints: [[3, 3, 3], [1, 1, 1, 1], [1, 3, 3], [1, 1, 1, 1], [1, 3, 3]],
+};
+
+// console.time('1');
+// solve(testCase1.width,
+//   testCase1.height,
+//   testCase1.columnHints,
+//   testCase1.rowHints);
+// console.timeEnd('1');
+
+// console.time('5');
+// solve(testCase5.width,
+//   testCase5.height, testCase5.columnHints, testCase5.rowHints);
+// console.timeEnd('5');
 exports.default = solve;
