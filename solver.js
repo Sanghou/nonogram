@@ -16,9 +16,27 @@ function solve(width, height, columnHints, rowHints) {
     verifyInput(columnHint, height);
   }
 
+  answer = solve_with_congestion(width,height,columnHints,rowHints, answer);
+  return answer
+}
+
+const MATCH = "MATCH";
+const NOT_MATCH = "NOT_MATCH";
+const UNDECIDED = "UNDECIDED";
+
+
+function solve_with_congestion(width, height, columnHints, rowHints,currentAnswer, congestionWidth = -1, congestionColumn = -1 , value=null) {
+  // console.log('congestion!');
+  let answer = currentAnswer;
+  // if (congestionColumn >= 0 && congestionWidth >=0) {
+  //   answer[congestionColumn][congestionWidth] = value;
+  // }
+
   let checkEnd = false;
 
-  while(!checkEnd) {
+  let count = 10;
+  let prev = '';
+  while(checkEnd!==MATCH || count > 0) {
     for (let i=0; i< height;i++) {
       const [value, bool] = specifyRow(width, rowHints[i], answer[i]);
       answer[i] = value;
@@ -34,25 +52,36 @@ function solve(width, height, columnHints, rowHints) {
     }
 
     checkEnd = checkSolution(answer, rowHints, columnHints);
+    if (checkEnd === NOT_MATCH) {
+      return null
+    }
+    count--;
+    // if (prev === JSON.stringify(answer)) {
+    //   answer = solve_with_congestion(width, height, columnHints, rowHints,answer,-1,-1 , true) ||
+    //     solve_with_congestion(width, height, columnHints, rowHints,answer, -1,-1 , false)
+    //
+    // }
+    prev = JSON.stringify(answer);
+  }
+
+  for (let arr of answer) {
+    console.log(...arr);
   }
 
   return answer.flat();
-}
 
-const MATCH = "MATCH";
-const NOT_MATCH = "NOT_MATCH";
-const UNDECIDED = "UNDECIDED";
+}
 
 function checkSolution(answer, rowHints, columnHints) {
   for (let i = 0; i < answer.length; i++) {
     const goodSolution = checkLine(answer[i], rowHints[i]);
     if (goodSolution === UNDECIDED) {
-      return false
+      return UNDECIDED
     }
     else if (goodSolution === NOT_MATCH) {
       // 값 추측하고 진행하는 부분 추가 시 아래 부분 수정.
       // 시간 있으면 이 부분 congestion 되돌아 가는 코드 추가하기
-      throw new Error("wrong congestion");
+      return NOT_MATCH
     }
   }
 
@@ -60,15 +89,15 @@ function checkSolution(answer, rowHints, columnHints) {
   for (let i=0; i < transposedArray.length; i++) {
     const goodSolution = checkLine(transposedArray[i], columnHints[i]);
     if (goodSolution === UNDECIDED) {
-      return false
+      return UNDECIDED
     }
     else if (goodSolution === NOT_MATCH) {
       // 값 추측하고 진행하는 부분 추가 시 아래 부분 수정.
       // 시간 있으면 이 부분 congestion 되돌아 가는 코드 추가하기
-      throw new Error("wrong congestion");
+      return NOT_MATCH
     }
   }
-  return true
+  return MATCH
 }
 
 function checkLine(line, hint) {
@@ -229,4 +258,47 @@ const verifyInput = (hints, length) => {
   }
 };
 
+const testcase1 = {
+  width: 8,
+  height: 6,
+  columnHints: [
+    [ 2 ],    [ 1, 1 ],
+[ 1, 1 ], [ 1 ],
+  [ 3 ],    [ 1 ],
+  [ 1 ],    [ 1, 1 ]
+],
+  rowHints: [ [ 1, 3 ], [ 1, 1, 1, 2 ], [ 1, 1 ], [ 1 ], [ 1 ], [ 1 ] ]
+};
+
+// console.time('1');
+// solve(testcase1.width, testcase1.height, testcase1.columnHints, testcase1.rowHints);
+// console.timeEnd('1');
+
+const testCase5 = {
+  width: 30,
+  height: 40,
+  columnHints: [
+    [2],[8],[12],[16],[19],
+    [22],[26],[28],[32],[3,23,8],
+    [18,7,7],[17,3,6],[16,5],[7,6,1,2],[6,1,6,1,1],
+    [5,2,6,2],[6,1,6,1,1],[7,6,1,4],[16,6],[18,3,7],
+    [26,8],[3,23,8],[31],[27],[24],
+    [21],[18],[14],[10],[3]
+  ],
+  rowHints: [
+    [3,5,3], [13], [13], [11] ,[11],
+    [5,5], [5,4], [4,4], [5,5], [5,3,5],
+    [5,1,5], [7,5], [17], [18], [19],
+    [19], [20], [6,4,7], [5,6], [6,7],
+    [8,8], [9,2,2,8], [9,9], [8,3,8], [9,1,8],
+    [9,9], [10,8], [9,8], [9,8], [9,9],
+    [9,8],[8,8],[9,9], [12,11], [11,12],
+    [12,11], [11,10], [9,9], [6,6], [3,3]
+  ],
+};
+
+console.time('5');
+solve(testCase5.width,
+  testCase5.height, testCase5.columnHints, testCase5.rowHints);
+console.timeEnd('5');
 exports.default = solve;
